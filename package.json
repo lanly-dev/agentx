@@ -1,23 +1,148 @@
 {
   "name": "agentx",
-  "displayName": "agentx",
-  "description": "",
-  "version": "0.0.1",
+  "displayName": "AI Agent Free Tier Quota Tracker",
+  "description": "Track and monitor free tier quota usage across AI providers including OpenAI, Anthropic, Google Gemini, and more",
+  "version": "0.1.0",
+  "publisher": "agentx",
   "engines": {
     "vscode": "^1.125.0"
   },
   "categories": [
-    "Other"
+    "Other",
+    "Visualization"
   ],
-  "activationEvents": [],
+  "icon": "icon.png",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "agentx.helloWorld",
-        "title": "Hello World"
+        "command": "agentx.showQuotaPanel",
+        "title": "agentx: Show Overview Panel"
+      },
+      {
+        "command": "agentx.recordUsage",
+        "title": "agentx: Record Usage"
+      },
+      {
+        "command": "agentx.quickRecordUsage",
+        "title": "agentx: Quick Record Usage"
+      },
+      {
+        "command": "agentx.editLimits",
+        "title": "agentx: Edit Provider Limits"
+      },
+      {
+        "command": "agentx.listProviders",
+        "title": "agentx: List & Toggle Providers"
+      },
+      {
+        "command": "agentx.showAlerts",
+        "title": "agentx: Show Alerts"
+      },
+      {
+        "command": "agentx.resetAllQuota",
+        "title": "agentx: Reset All Quotas"
+      },
+      {
+        "command": "agentx.resetProvider",
+        "title": "agentx: Reset Provider Quota"
+      },
+      {
+        "command": "agentx.addCustomProvider",
+        "title": "agentx: Add Custom Provider"
+      },
+      {
+        "command": "agentx.exportQuota",
+        "title": "agentx: Export Quota Data"
+      },
+      {
+        "command": "agentx.importQuota",
+        "title": "agentx: Import Quota Data"
+      },
+      {
+        "command": "agentx.refreshQuota",
+        "title": "agentx: Refresh View"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "AI Agent Free Tier Quota Tracker",
+      "properties": {
+        "agentx.quotaTracker.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable the quota tracker"
+        },
+        "agentx.quotaTracker.autoTrack": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically detect and track AI API calls"
+        },
+        "agentx.quotaTracker.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show quota usage in the status bar"
+        },
+        "agentx.quotaTracker.showAlerts": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show warning notifications when approaching quota limits"
+        },
+        "agentx.quotaTracker.alertThreshold": {
+          "type": "number",
+          "default": 80,
+          "minimum": 10,
+          "maximum": 100,
+          "description": "Percentage threshold at which to start showing quota warnings"
+        }
+      }
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "agentx.showQuotaPanel",
+          "when": "true"
+        },
+        {
+          "command": "agentx.recordUsage",
+          "when": "true"
+        },
+        {
+          "command": "agentx.quickRecordUsage",
+          "when": "true"
+        },
+        {
+          "command": "agentx.editLimits",
+          "when": "true"
+        },
+        {
+          "command": "agentx.listProviders",
+          "when": "true"
+        },
+        {
+          "command": "agentx.showAlerts",
+          "when": "true"
+        },
+        {
+          "command": "agentx.resetAllQuota",
+          "when": "true"
+        },
+        {
+          "command": "agentx.addCustomProvider",
+          "when": "true"
+        },
+        {
+          "command": "agentx.exportQuota",
+          "when": "true"
+        },
+        {
+          "command": "agentx.importQuota",
+          "when": "true"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
@@ -31,16 +156,13 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.125.0",
-    "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
-    "typescript-eslint": "^8.56.1",
+    "@types/vscode": "^1.125.0",
     "eslint": "^9.39.3",
-    "typescript": "^5.9.3",
     "ts-loader": "^9.5.4",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.56.1",
     "webpack": "^5.105.3",
-    "webpack-cli": "^6.0.1",
-    "@vscode/test-cli": "^0.0.12",
-    "@vscode/test-electron": "^2.5.2"
+    "webpack-cli": "^6.0.1"
   }
 }
