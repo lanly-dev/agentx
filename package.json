@@ -17,10 +17,28 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "agentx-quota-sidebar",
+          "title": "AI Quota Tracker",
+          "icon": "icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "agentx-quota-sidebar": [
+        {
+          "type": "tree",
+          "id": "agentxQuotaSidebar",
+          "name": "AI Quotas"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "agentx.showQuotaPanel",
-        "title": "agentx: Show Overview Panel"
+        "title": "agentx: Show Quota Sidebar"
       },
       {
         "command": "agentx.recordUsage",
@@ -65,40 +83,32 @@
       {
         "command": "agentx.refreshQuota",
         "title": "agentx: Refresh View"
+      },
+      {
+        "command": "agentx.toggleAutoTrack",
+        "title": "agentx: Toggle Auto-Tracking"
+      },
+      {
+        "command": "agentx.recordApiUsage",
+        "title": "agentx: Record API Usage (internal)"
+      },
+      {
+        "command": "agentx.sidebarToggleProvider",
+        "title": "Toggle Provider"
+      },
+      {
+        "command": "agentx.sidebarResetProvider",
+        "title": "Reset Provider Quota"
+      },
+      {
+        "command": "agentx.sidebarRecordUsage",
+        "title": "Record +1 Request"
+      },
+      {
+        "command": "agentx.sidebarEditLimits",
+        "title": "Edit Limits..."
       }
     ],
-    "configuration": {
-      "title": "AI Agent Free Tier Quota Tracker",
-      "properties": {
-        "agentx.quotaTracker.enabled": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable or disable the quota tracker"
-        },
-        "agentx.quotaTracker.autoTrack": {
-          "type": "boolean",
-          "default": true,
-          "description": "Automatically detect and track AI API calls"
-        },
-        "agentx.quotaTracker.showStatusBar": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show quota usage in the status bar"
-        },
-        "agentx.quotaTracker.showAlerts": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show warning notifications when approaching quota limits"
-        },
-        "agentx.quotaTracker.alertThreshold": {
-          "type": "number",
-          "default": 80,
-          "minimum": 10,
-          "maximum": 100,
-          "description": "Percentage threshold at which to start showing quota warnings"
-        }
-      }
-    },
     "menus": {
       "commandPalette": [
         {
@@ -140,8 +150,84 @@
         {
           "command": "agentx.importQuota",
           "when": "true"
+        },
+        {
+          "command": "agentx.toggleAutoTrack",
+          "when": "true"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "agentx.sidebarRecordUsage",
+          "when": "view == agentxQuotaSidebar && viewItem == provider-enabled",
+          "group": "inline"
+        },
+        {
+          "command": "agentx.sidebarToggleProvider",
+          "when": "view == agentxQuotaSidebar && viewItem == provider-enabled",
+          "group": "inline"
+        },
+        {
+          "command": "agentx.sidebarToggleProvider",
+          "when": "view == agentxQuotaSidebar && viewItem == provider-disabled",
+          "group": "inline"
+        },
+        {
+          "command": "agentx.sidebarResetProvider",
+          "when": "view == agentxQuotaSidebar && viewItem == provider-enabled"
+        },
+        {
+          "command": "agentx.sidebarEditLimits",
+          "when": "view == agentxQuotaSidebar && viewItem == provider-enabled"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "agentx.refreshQuota",
+          "when": "view == agentxQuotaSidebar",
+          "group": "navigation"
+        },
+        {
+          "command": "agentx.resetAllQuota",
+          "when": "view == agentxQuotaSidebar"
+        },
+        {
+          "command": "agentx.toggleAutoTrack",
+          "when": "view == agentxQuotaSidebar"
         }
       ]
+    },
+    "configuration": {
+      "title": "AI Agent Free Tier Quota Tracker",
+      "properties": {
+        "agentx.quotaTracker.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable the quota tracker"
+        },
+        "agentx.quotaTracker.autoTrack": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically detect and track AI API calls by intercepting HTTP requests"
+        },
+        "agentx.quotaTracker.showStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show quota usage in the status bar"
+        },
+        "agentx.quotaTracker.showAlerts": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show warning notifications when approaching quota limits"
+        },
+        "agentx.quotaTracker.alertThreshold": {
+          "type": "number",
+          "default": 80,
+          "minimum": 10,
+          "maximum": 100,
+          "description": "Percentage threshold at which to start showing quota warnings"
+        }
+      }
     }
   },
   "scripts": {
@@ -152,6 +238,7 @@
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src",
     "efix": "eslint . --fix",
     "test": "vscode-test"
   },
