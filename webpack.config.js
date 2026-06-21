@@ -1,8 +1,8 @@
 //@ts-check
 
-'use strict';
+'use strict'
 
-const path = require('path');
+const path = require('path')
 
 //@ts-check
 /** @typedef {import('webpack').Configuration} WebpackConfig **/
@@ -42,7 +42,7 @@ const extensionConfig = {
   },
   devtool: 'nosources-source-map',
   infrastructureLogging: {
-    level: "log", // enables logging required for problem matchers
-  },
-};
-module.exports = [ extensionConfig ];
+    level: 'log' // enables logging required for problem matchers
+  }
+}
+module.exports = [ extensionConfig ]

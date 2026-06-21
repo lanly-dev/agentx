@@ -3,33 +3,33 @@
  * Displays a detailed overview of all AI provider quotas
  */
 
-import * as vscode from 'vscode';
-import { AIProvider } from './types';
+import * as vscode from 'vscode'
+import { AIProvider } from './types'
 
 export class QuotaPanel {
-  public static currentPanel: QuotaPanel | undefined;
-  private readonly _panel: vscode.WebviewPanel;
-  private _disposables: vscode.Disposable[] = [];
+  public static currentPanel: QuotaPanel | undefined
+  private readonly _panel: vscode.WebviewPanel
+  private _disposables: vscode.Disposable[] = []
 
   private constructor(panel: vscode.WebviewPanel, private extensionUri: vscode.Uri) {
-    this._panel = panel;
-    this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-    this._panel.webview.html = this._getLoadingHtml();
+    this._panel = panel
+    this._panel.onDidDispose(() => this.dispose(), null, this._disposables)
+    this._panel.webview.html = this._getLoadingHtml()
     this._panel.webview.onDidReceiveMessage(
       message => this._handleMessage(message),
       null,
       this._disposables
-    );
+    )
   }
 
   public static createOrShow(extensionUri: vscode.Uri): void {
     const column = vscode.window.activeTextEditor
       ? vscode.window.activeTextEditor.viewColumn
-      : undefined;
+      : undefined
 
     if (QuotaPanel.currentPanel) {
-      QuotaPanel.currentPanel._panel.reveal(column);
-      return;
+      QuotaPanel.currentPanel._panel.reveal(column)
+      return
     }
 
     const panel = vscode.window.createWebviewPanel(
@@ -39,67 +39,67 @@ export class QuotaPanel {
       {
         enableScripts: true,
         retainContextWhenHidden: true,
-        localResourceRoots: [],
+        localResourceRoots: []
       }
-    );
+    )
 
-    QuotaPanel.currentPanel = new QuotaPanel(panel, extensionUri);
+    QuotaPanel.currentPanel = new QuotaPanel(panel, extensionUri)
   }
 
   /**
    * Update the panel with current provider data
    */
   public update(providers: AIProvider[]): void {
-    if (this._panel.visible) {
-      this._panel.webview.html = this._getHtmlForProviders(providers);
-    }
+    if (this._panel.visible) 
+      this._panel.webview.html = this._getHtmlForProviders(providers)
+    
   }
 
   /**
    * Clean up resources
    */
   public dispose(): void {
-    QuotaPanel.currentPanel = undefined;
-    this._panel.dispose();
+    QuotaPanel.currentPanel = undefined
+    this._panel.dispose()
     while (this._disposables.length) {
-      const d = this._disposables.pop();
-      if (d) {
-        d.dispose();
-      }
+      const d = this._disposables.pop()
+      if (d) 
+        d.dispose()
+      
     }
   }
 
   private _handleMessage(message: { command: string; providerId?: string; data?: unknown }): void {
     switch (message.command) {
       case 'refresh':
-        vscode.commands.executeCommand('agentx.refreshQuota');
-        break;
+        vscode.commands.executeCommand('agentx.refreshQuota')
+        break
       case 'resetProvider':
-        if (message.providerId) {
-          vscode.commands.executeCommand('agentx.resetProvider', message.providerId);
-        }
-        break;
+        if (message.providerId) 
+          vscode.commands.executeCommand('agentx.resetProvider', message.providerId)
+        
+        break
       case 'resetAll':
-        vscode.commands.executeCommand('agentx.resetAllQuota');
-        break;
+        vscode.commands.executeCommand('agentx.resetAllQuota')
+        break
       case 'toggleProvider':
-        if (message.providerId) {
-          vscode.commands.executeCommand('agentx.toggleProvider', message.providerId);
-        }
-        break;
+        if (message.providerId) 
+          vscode.commands.executeCommand('agentx.toggleProvider', message.providerId)
+        
+        break
       case 'recordUsage':
-        if (message.providerId && message.data) {
-          vscode.commands.executeCommand('agentx.recordUsage', message.providerId, message.data);
-        }
-        break;
+        if (message.providerId && message.data) 
+          vscode.commands.executeCommand('agentx.recordUsage', message.providerId, message.data)
+        
+        break
       case 'exportData':
-        vscode.commands.executeCommand('agentx.exportQuota');
-        break;
+        vscode.commands.executeCommand('agentx.exportQuota')
+        break
       case 'editLimits':
-        if (message.providerId) {
-          vscode.commands.executeCommand('agentx.editLimits', message.providerId);
-        }
-        break;
+        if (message.providerId) 
+          vscode.commands.executeCommand('agentx.editLimits', message.providerId)
+        
+        break
     }
   }
 
@@ -118,24 +118,24 @@ export class QuotaPanel {
 <body>
   <div class="loading">Loading quota data...</div>
 </body>
-</html>`;
+</html>`
   }
 
   private _getHtmlForProviders(providers: AIProvider[]): string {
-    const enabledProviders = providers.filter(p => p.enabled);
-    const disabledProviders = providers.filter(p => !p.enabled);
+    const enabledProviders = providers.filter(p => p.enabled)
+    const disabledProviders = providers.filter(p => !p.enabled)
 
-    const providerCards = enabledProviders.map(p => this._getProviderCard(p)).join('\n');
-    const disabledCards = disabledProviders.map(p => this._getProviderCard(p, true)).join('\n');
+    const providerCards = enabledProviders.map(p => this._getProviderCard(p)).join('\n')
+    const disabledCards = disabledProviders.map(p => this._getProviderCard(p, true)).join('\n')
 
     const totalAlerts = enabledProviders.filter(p => {
-      const reqPct = p.limits.maxRequests > 0 ? (p.usage.requests / p.limits.maxRequests) * 100 : 0;
-      const inPct = p.limits.maxInputTokens > 0 ? (p.usage.inputTokens / p.limits.maxInputTokens) * 100 : 0;
-      const outPct = p.limits.maxOutputTokens > 0 ? (p.usage.outputTokens / p.limits.maxOutputTokens) * 100 : 0;
-      return Math.max(reqPct, inPct, outPct) >= 80;
-    }).length;
+      const reqPct = p.limits.maxRequests > 0 ? (p.usage.requests / p.limits.maxRequests) * 100 : 0
+      const inPct = p.limits.maxInputTokens > 0 ? (p.usage.inputTokens / p.limits.maxInputTokens) * 100 : 0
+      const outPct = p.limits.maxOutputTokens > 0 ? (p.usage.outputTokens / p.limits.maxOutputTokens) * 100 : 0
+      return Math.max(reqPct, inPct, outPct) >= 80
+    }).length
 
-    const summaryBarColor = totalAlerts > 0 ? '#e74c3c' : '#27ae60';
+    const summaryBarColor = totalAlerts > 0 ? '#e74c3c' : '#27ae60'
 
     return `<!DOCTYPE html>
 <html lang="en">
@@ -324,27 +324,27 @@ export class QuotaPanel {
     function postMessage(msg) { vscode.postMessage(msg); }
   </script>
 </body>
-</html>`;
+</html>`
   }
 
   private _getProviderCard(provider: AIProvider, disabled: boolean = false): string {
     const reqPct = provider.limits.maxRequests > 0
       ? Math.min(100, (provider.usage.requests / provider.limits.maxRequests) * 100)
-      : 0;
+      : 0
     const inPct = provider.limits.maxInputTokens > 0
       ? Math.min(100, (provider.usage.inputTokens / provider.limits.maxInputTokens) * 100)
-      : 0;
+      : 0
     const outPct = provider.limits.maxOutputTokens > 0
       ? Math.min(100, (provider.usage.outputTokens / provider.limits.maxOutputTokens) * 100)
-      : 0;
+      : 0
 
-    const maxPct = Math.max(reqPct, inPct, outPct);
-    const badgeClass = maxPct >= 100 ? 'badge-danger' : maxPct >= 80 ? 'badge-warn' : 'badge-good';
-    const badgeText = disabled ? 'Disabled' : maxPct >= 100 ? 'Exhausted' : maxPct >= 80 ? 'Warning' : `${Math.round(maxPct)}% used`;
+    const maxPct = Math.max(reqPct, inPct, outPct)
+    const badgeClass = maxPct >= 100 ? 'badge-danger' : maxPct >= 80 ? 'badge-warn' : 'badge-good'
+    const badgeText = disabled ? 'Disabled' : maxPct >= 100 ? 'Exhausted' : maxPct >= 80 ? 'Warning' : `${Math.round(maxPct)}% used`
 
-    const getBarClass = (pct: number) => pct >= 100 ? 'progress-red' : pct >= 80 ? 'progress-yellow' : 'progress-green';
+    const getBarClass = (pct: number) => pct >= 100 ? 'progress-red' : pct >= 80 ? 'progress-yellow' : 'progress-green'
 
-    const timeUntilReset = this._getTimeUntilReset(provider.usage.periodReset);
+    const timeUntilReset = this._getTimeUntilReset(provider.usage.periodReset)
 
     return `
   <div class="provider-card ${disabled ? 'disabled' : ''}">
@@ -391,25 +391,25 @@ export class QuotaPanel {
         <button class="btn-sm" onclick="postMessage({ command: 'toggleProvider', providerId: '${provider.id}' })">$(play) Enable</button>
       </div>`}
     </div>
-  </div>`;
+  </div>`
   }
 
   private _getTimeUntilReset(periodReset: number): string {
-    const now = Date.now();
-    const remaining = periodReset - now;
-    if (remaining <= 0) {return 'Resetting...';}
-    const hours = Math.floor(remaining / 3600000);
-    const minutes = Math.floor((remaining % 3600000) / 60000);
+    const now = Date.now()
+    const remaining = periodReset - now
+    if (remaining <= 0) return 'Resetting...'
+    const hours = Math.floor(remaining / 3600000)
+    const minutes = Math.floor((remaining % 3600000) / 60000)
     if (hours > 24) {
-      const days = Math.floor(hours / 24);
-      return `Resets in ${days}d ${hours % 24}h`;
+      const days = Math.floor(hours / 24)
+      return `Resets in ${days}d ${hours % 24}h`
     }
-    return `Resets in ${hours}h ${minutes}m`;
+    return `Resets in ${hours}h ${minutes}m`
   }
 
   private _formatNumber(num: number): string {
-    if (num >= 1000000) {return (num / 1000000).toFixed(1) + 'M';}
-    if (num >= 1000) {return (num / 1000).toFixed(1) + 'K';}
-    return num.toString();
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M'
+    if (num >= 1000) return (num / 1000).toFixed(1) + 'K'
+    return num.toString()
   }
 }

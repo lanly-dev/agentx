@@ -47,9 +47,9 @@ export const DEFAULT_PROVIDERS: Omit<AIProvider, 'usage'>[] = [
     limits: {
       maxRequests: 100,
       maxInputTokens: 100000,
-      maxOutputTokens: 50000,
+      maxOutputTokens: 50000
     },
-    resetIntervalHours: 24,
+    resetIntervalHours: 24
   },
   {
     id: 'openai-gpt35',
@@ -58,9 +58,9 @@ export const DEFAULT_PROVIDERS: Omit<AIProvider, 'usage'>[] = [
     limits: {
       maxRequests: 200,
       maxInputTokens: 200000,
-      maxOutputTokens: 100000,
+      maxOutputTokens: 100000
     },
-    resetIntervalHours: 24,
+    resetIntervalHours: 24
   },
   {
     id: 'anthropic-claude',
@@ -69,9 +69,9 @@ export const DEFAULT_PROVIDERS: Omit<AIProvider, 'usage'>[] = [
     limits: {
       maxRequests: 100,
       maxInputTokens: 100000,
-      maxOutputTokens: 100000,
+      maxOutputTokens: 100000
     },
-    resetIntervalHours: 24,
+    resetIntervalHours: 24
   },
   {
     id: 'google-gemini',
@@ -80,9 +80,9 @@ export const DEFAULT_PROVIDERS: Omit<AIProvider, 'usage'>[] = [
     limits: {
       maxRequests: 60,
       maxInputTokens: 60000,
-      maxOutputTokens: 30000,
+      maxOutputTokens: 30000
     },
-    resetIntervalHours: 60,
+    resetIntervalHours: 60
   },
   {
     id: 'github-copilot',
@@ -91,9 +91,9 @@ export const DEFAULT_PROVIDERS: Omit<AIProvider, 'usage'>[] = [
     limits: {
       maxRequests: 300,
       maxInputTokens: 0,
-      maxOutputTokens: 0,
+      maxOutputTokens: 0
     },
-    resetIntervalHours: 24,
+    resetIntervalHours: 24
   },
   {
     id: 'custom',
@@ -102,14 +102,14 @@ export const DEFAULT_PROVIDERS: Omit<AIProvider, 'usage'>[] = [
     limits: {
       maxRequests: 100,
       maxInputTokens: 100000,
-      maxOutputTokens: 50000,
+      maxOutputTokens: 50000
     },
-    resetIntervalHours: 24,
-  },
-];
+    resetIntervalHours: 24
+  }
+]
 
 export const RESET_INTERVALS: Record<ResetFrequency, number> = {
   daily: 24,
   weekly: 168,
-  monthly: 720,
-};
+  monthly: 720
+}
