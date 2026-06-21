@@ -39,74 +39,76 @@ export interface AIProvider {
 
 export type ResetFrequency = 'daily' | 'weekly' | 'monthly';
 
-export const DEFAULT_PROVIDERS: Omit<AIProvider, 'usage'>[] = [
-  {
-    id: 'openai-gpt4o-mini',
-    name: 'OpenAI GPT-4o mini',
-    enabled: true,
-    limits: {
-      maxRequests: 100,
-      maxInputTokens: 100000,
-      maxOutputTokens: 50000
-    },
-    resetIntervalHours: 24
-  },
-  {
-    id: 'openai-gpt35',
-    name: 'OpenAI GPT-3.5',
-    enabled: true,
-    limits: {
-      maxRequests: 200,
-      maxInputTokens: 200000,
-      maxOutputTokens: 100000
-    },
-    resetIntervalHours: 24
-  },
-  {
-    id: 'anthropic-claude',
-    name: 'Anthropic Claude',
-    enabled: true,
-    limits: {
-      maxRequests: 100,
-      maxInputTokens: 100000,
-      maxOutputTokens: 100000
-    },
-    resetIntervalHours: 24
-  },
-  {
-    id: 'google-gemini',
-    name: 'Google Gemini',
-    enabled: true,
-    limits: {
-      maxRequests: 60,
-      maxInputTokens: 60000,
-      maxOutputTokens: 30000
-    },
-    resetIntervalHours: 60
-  },
-  {
-    id: 'github-copilot',
-    name: 'GitHub Copilot',
-    enabled: true,
-    limits: {
-      maxRequests: 300,
-      maxInputTokens: 0,
-      maxOutputTokens: 0
-    },
-    resetIntervalHours: 24
-  },
-  {
-    id: 'custom',
-    name: 'Custom API',
-    enabled: false,
-    limits: {
-      maxRequests: 100,
-      maxInputTokens: 100000,
-      maxOutputTokens: 50000
-    },
-    resetIntervalHours: 24
-  }
-]
+// For mockups
+
+// export const DEFAULT_PROVIDERS: Omit<AIProvider, 'usage'>[] = [
+//   {
+//     id: 'openai-gpt4o-mini',
+//     name: 'OpenAI GPT-4o mini',
+//     enabled: true,
+//     limits: {
+//       maxRequests: 100,
+//       maxInputTokens: 100000,
+//       maxOutputTokens: 50000
+//     },
+//     resetIntervalHours: 24
+//   },
+//   {
+//     id: 'openai-gpt35',
+//     name: 'OpenAI GPT-3.5',
+//     enabled: true,
+//     limits: {
+//       maxRequests: 200,
+//       maxInputTokens: 200000,
+//       maxOutputTokens: 100000
+//     },
+//     resetIntervalHours: 24
+//   },
+//   {
+//     id: 'anthropic-claude',
+//     name: 'Anthropic Claude',
+//     enabled: true,
+//     limits: {
+//       maxRequests: 100,
+//       maxInputTokens: 100000,
+//       maxOutputTokens: 100000
+//     },
+//     resetIntervalHours: 24
+//   },
+//   {
+//     id: 'google-gemini',
+//     name: 'Google Gemini',
+//     enabled: true,
+//     limits: {
+//       maxRequests: 60,
+//       maxInputTokens: 60000,
+//       maxOutputTokens: 30000
+//     },
+//     resetIntervalHours: 60
+//   },
+//   {
+//     id: 'github-copilot',
+//     name: 'GitHub Copilot',
+//     enabled: true,
+//     limits: {
+//       maxRequests: 300,
+//       maxInputTokens: 0,
+//       maxOutputTokens: 0
+//     },
+//     resetIntervalHours: 24
+//   },
+//   {
+//     id: 'custom',
+//     name: 'Custom API',
+//     enabled: false,
+//     limits: {
+//       maxRequests: 100,
+//       maxInputTokens: 100000,
+//       maxOutputTokens: 50000
+//     },
+//     resetIntervalHours: 24
+//   }
+// ]
 
 export const RESET_INTERVALS: Record<ResetFrequency, number> = {
   daily: 24,

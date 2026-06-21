@@ -69,10 +69,6 @@
         "title": "agentx: Reset Provider Quota"
       },
       {
-        "command": "agentx.addCustomProvider",
-        "title": "agentx: Add Custom Provider"
-      },
-      {
         "command": "agentx.exportQuota",
         "title": "agentx: Export Quota Data"
       },
@@ -137,10 +133,6 @@
         },
         {
           "command": "agentx.resetAllQuota",
-          "when": "true"
-        },
-        {
-          "command": "agentx.addCustomProvider",
           "when": "true"
         },
         {

@@ -4,7 +4,7 @@
  */
 
 import * as vscode from 'vscode'
-import { QuotaLimit, AIProvider, DEFAULT_PROVIDERS } from './types'
+import { QuotaLimit, AIProvider } from './types'
 
 const CONFIG_SECTION = 'agentx.quotaTracker'
 
@@ -141,52 +141,6 @@ export class ConfigManager {
     })
 
     vscode.window.showInformationMessage(`Updated limits for ${provider.label}`)
-  }
-
-  /**
-   * Prompt to add a custom provider
-   */
-  static async promptAddCustomProvider(tracker: { updateProvider: (id: string, updates: Partial<AIProvider>) => void }): Promise<void> {
-    const name = await vscode.window.showInputBox({
-      prompt: 'Provider name (e.g. "My Custom API")',
-      placeHolder: 'Enter provider name'
-    })
-    if (!name) return
-
-    const maxRequests = await vscode.window.showInputBox({
-      prompt: 'Max requests per period',
-      value: '100',
-      validateInput: v => isNaN(Number(v)) ? 'Enter a valid number' : null
-    })
-    if (!maxRequests) return
-
-    const maxInput = await vscode.window.showInputBox({
-      prompt: 'Max input tokens',
-      value: '100000',
-      validateInput: v => isNaN(Number(v)) ? 'Enter a valid number' : null
-    })
-    if (!maxInput) return
-
-    const maxOutput = await vscode.window.showInputBox({
-      prompt: 'Max output tokens',
-      value: '50000',
-      validateInput: v => isNaN(Number(v)) ? 'Enter a valid number' : null
-    })
-    if (!maxOutput) return
-
-    const customId = `custom-${Date.now()}`
-    tracker.updateProvider('custom', {
-      id: customId,
-      name,
-      enabled: true,
-      limits: {
-        maxRequests: Number(maxRequests),
-        maxInputTokens: Number(maxInput),
-        maxOutputTokens: Number(maxOutput)
-      }
-    })
-
-    vscode.window.showInformationMessage(`Added custom provider "${name}"`)
   }
 
   // Private methods

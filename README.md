@@ -1,71 +1,131 @@
-# agentx README
+# AI Agent Free Tier Quota Tracker
 
-This is the README for your extension "agentx". After writing up a brief description, we recommend including the following sections.
+Track and monitor your free tier quota usage across AI providers including OpenAI, Anthropic Claude, Google Gemini, GitHub Copilot, and more.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### 🔍 Real-time Quota Dashboard in Activity Bar
+View all your AI provider quotas directly in the VS Code sidebar with color-coded status indicators.
 
-For example if there is an image subfolder under your extension project workspace:
+![Sidebar View](https://img.shields.io/badge/sidebar-tree_view-blue)
 
-\!\[feature X\]\(images/feature-x.png\)
+- **Overall usage summary** at the top
+- **Expandable provider cards** showing requests, input tokens, output tokens
+- **Progress bars** using Unicode characters
+- **Color-coded icons**: green (healthy), yellow (warning ≥80%), red (exhausted)
+- **Auto-refresh** whenever usage is recorded
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### 🔌 Automatic Tracking via Network Interception
+The extension automatically detects HTTP/HTTPS requests to known AI API endpoints made from within VS Code and records quota usage in real-time.
 
-## Requirements
+**Supported endpoints:**
+- api.openai.com → OpenAI GPT-4o mini
+- api.anthropic.com → Anthropic Claude
+- generativelanguage.googleapis.com → Google Gemini
+- api.githubcopilot.com / copilot-proxy.githubusercontent.com → GitHub Copilot
+- api.groq.com, api.together.xyz, api.mistral.ai, api.deepinfra.com, api.replicate.com, api.cohere.ai, api.perplexity.ai, api.elevenlabs.io, api.stability.ai, aiplatform.googleapis.com, bedrock-runtime.*
+- *.openai.azure.com → Azure OpenAI
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Token counts are estimated from request/response body sizes (~4.5 bytes = 1 token).
+
+Toggle auto-tracking on/off via the sidebar title bar button or command palette.
+
+### 📝 Manual Tracking
+If auto-tracking doesn't cover your use case, you can manually record usage:
+
+- **Right-click** any provider in the sidebar → **Record +1 Request**
+- **Command Palette** → `agentx: Record Usage` → interactive wizard
+- **Quick Record** via command palette
+
+### 🔧 Custom Providers
+Add any AI service with the **"Add Custom Provider"** command. Define your own name, request limits, and token limits.
+
+### ⚠️ Quota Alerts
+Get warned when you're approaching your limits:
+- **80%** usage → yellow warning in sidebar
+- **100%** usage → red exhausted state
+- **Status bar** shows the most critical provider's usage
+- **Command** `agentx: Show Alerts` lists all active warnings
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `agentx: Show Quota Sidebar` | Open the AI Quota sidebar in activity bar |
+| `agentx: Record Usage` | Interactively record API usage |
+| `agentx: Add Custom Provider` | Add a custom AI provider with limits |
+| `agentx: Edit Provider Limits` | Change max requests/tokens for a provider |
+| `agentx: List & Toggle Providers` | View all providers and toggle enabled/disabled |
+| `agentx: Show Alerts` | Display current quota warnings |
+| `agentx: Reset Provider Quota` | Clear usage for one provider |
+| `agentx: Reset All Quotas` | Clear usage for all providers |
+| `agentx: Toggle Auto-Tracking` | Start/stop network interception |
+| `agentx: Export Quota Data` | Export all quota data as JSON |
+| `agentx: Import Quota Data` | Import quota data from JSON file |
+| `agentx: Refresh View` | Manually refresh the sidebar |
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `agentx.quotaTracker.enabled` | `true` | Enable or disable the quota tracker |
+| `agentx.quotaTracker.autoTrack` | `true` | Automatically detect and track AI API calls by intercepting HTTP requests |
+| `agentx.quotaTracker.showStatusBar` | `true` | Show quota usage in the status bar |
+| `agentx.quotaTracker.showAlerts` | `true` | Show warning notifications when approaching quota limits |
+| `agentx.quotaTracker.alertThreshold` | `80` | Percentage threshold at which to start showing quota warnings |
 
-For example:
+## Sidebar Context Menu
 
-This extension contributes the following settings:
+Right-click a provider in the sidebar for quick actions:
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+| Action | Description |
+|--------|-------------|
+| **Record +1 Request** | Immediately add one request to that provider |
+| **Toggle Provider** | Enable/disable tracking for that provider |
+| **Reset Provider Quota** | Clear all usage for that provider |
+| **Edit Limits...** | Change max requests/tokens |
+
+## Sidebar Title Bar
+
+| Button | Description |
+|--------|-------------|
+| 🔄 Refresh | Refresh all quota data |
+| 🗑 Reset All | Reset all provider quotas |
+| 📡 Toggle Auto-Tracking | Start/stop network interception |
+
+## Getting Started
+
+1. Install the extension
+2. The AI Quota Tracker icon will appear in your activity bar (left sidebar)
+3. Click the icon to open the quota sidebar — it will be empty initially
+4. Use **"Add Custom Provider"** to define the AI services you use
+5. Or simply use the AI services — auto-tracking will detect API calls and create entries
+6. Monitor your usage in real-time from the sidebar
+
+## Requirements
+
+- VS Code ^1.125.0
+- No external dependencies required
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- Auto-tracking only works for HTTP requests made **within the VS Code extension host process**. External API calls from your browser or standalone tools are not automatically detected — use manual recording for those.
+- Token estimation is approximate (±20%) based on byte-length conversion.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.1.0
 
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+Initial release:
+- Sidebar tree view with color-coded provider cards
+- Network interceptor for automatic API call detection
+- Manual usage recording
+- Custom provider support
+- Quota alerts at configurable thresholds
+- Data export/import as JSON
+- Configured limits per provider
+- Automatic period reset based on configurable intervals
 
 ---
 
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+**Enjoy tracking your AI usage!**

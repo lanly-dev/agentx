@@ -248,17 +248,6 @@ export function activate(context: vscode.ExtensionContext) {
     })
   )
 
-  // Add custom provider
-  context.subscriptions.push(
-    vscode.commands.registerCommand('agentx.addCustomProvider', async () => {
-      if (!quotaTracker) return
-
-      await ConfigManager.promptAddCustomProvider({
-        updateProvider: (id: string, updates: Partial<AIProvider>) => quotaTracker!.updateProvider(id, updates)
-      })
-    })
-  )
-
   // List all providers with their status (opens quick pick)
   context.subscriptions.push(
     vscode.commands.registerCommand('agentx.listProviders', async () => {
