@@ -37,9 +37,6 @@ If auto-tracking doesn't cover your use case, you can manually record usage:
 - **Command Palette** → `agentx: Record Usage` → interactive wizard
 - **Quick Record** via command palette
 
-### 🔧 Custom Providers
-Add any AI service with the **"Add Custom Provider"** command. Define your own name, request limits, and token limits.
-
 ### ⚠️ Quota Alerts
 Get warned when you're approaching your limits:
 - **80%** usage → yellow warning in sidebar
@@ -53,7 +50,6 @@ Get warned when you're approaching your limits:
 |---------|-------------|
 | `agentx: Show Quota Sidebar` | Open the AI Quota sidebar in activity bar |
 | `agentx: Record Usage` | Interactively record API usage |
-| `agentx: Add Custom Provider` | Add a custom AI provider with limits |
 | `agentx: Edit Provider Limits` | Change max requests/tokens for a provider |
 | `agentx: List & Toggle Providers` | View all providers and toggle enabled/disabled |
 | `agentx: Show Alerts` | Display current quota warnings |
@@ -98,8 +94,7 @@ Right-click a provider in the sidebar for quick actions:
 1. Install the extension
 2. The AI Quota Tracker icon will appear in your activity bar (left sidebar)
 3. Click the icon to open the quota sidebar — it will be empty initially
-4. Use **"Add Custom Provider"** to define the AI services you use
-5. Or simply use the AI services — auto-tracking will detect API calls and create entries
+4. Or simply use the AI services — auto-tracking will detect API calls and create entries
 6. Monitor your usage in real-time from the sidebar
 
 ## Requirements
@@ -120,7 +115,6 @@ Initial release:
 - Sidebar tree view with color-coded provider cards
 - Network interceptor for automatic API call detection
 - Manual usage recording
-- Custom provider support
 - Quota alerts at configurable thresholds
 - Data export/import as JSON
 - Configured limits per provider

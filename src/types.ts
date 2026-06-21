@@ -39,9 +39,8 @@ export interface AIProvider {
 
 export type ResetFrequency = 'daily' | 'weekly' | 'monthly';
 
-// For mockups
-
-// export const DEFAULT_PROVIDERS: Omit<AIProvider, 'usage'>[] = [
+/** Start with no pre-defined providers. Users add their own via "Add Custom Provider" command. */
+export const DEFAULT_PROVIDERS: Omit<AIProvider, 'usage'>[] = []
 //   {
 //     id: 'openai-gpt4o-mini',
 //     name: 'OpenAI GPT-4o mini',

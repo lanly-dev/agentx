@@ -261,7 +261,7 @@ export class QuotaTracker {
       for (const data of stored) {
         this.providers.set(data.id, {
           id: data.id,
-          name: DEFAULT_PROVIDERS.find(p => p.id === data.id)?.name || data.id,
+          name: data.id,
           enabled: data.enabled,
           limits: data.limits,
           usage: data.usage,
