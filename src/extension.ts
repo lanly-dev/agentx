@@ -125,66 +125,6 @@ export function activate(context: vscode.ExtensionContext) {
     })
   )
 
-  // Record usage manually
-  context.subscriptions.push(
-    vscode.commands.registerCommand('agentx.recordUsage', async (providerId?: string, data?: { requests: number; inputTokens: number; outputTokens: number }) => {
-      if (!quotaTracker) return
-
-      if (providerId && data) {
-        quotaTracker.recordUsage(providerId, data.requests, data.inputTokens, data.outputTokens)
-        vscode.window.showInformationMessage('Recorded usage for ' + providerId)
-      } else {
-        await ConfigManager.promptRecordUsage({
-          getProviders: () => quotaTracker!.getProviders(),
-          recordUsage: (id: string, req: number, inT: number, outT: number) => quotaTracker!.recordUsage(id, req, inT, outT)
-        })
-      }
-    })
-  )
-
-  // Edit provider limits
-  context.subscriptions.push(
-    vscode.commands.registerCommand('agentx.editLimits', async (providerId?: string) => {
-      if (!quotaTracker) return
-
-      if (providerId) {
-        const p = quotaTracker.getProvider(providerId)
-        if (!p) return
-
-        const maxRequests = await vscode.window.showInputBox({
-          prompt: 'Max requests',
-          value: String(p.limits.maxRequests),
-          validateInput: v => isNaN(Number(v)) ? 'Enter a valid number' : null
-        })
-        if (!maxRequests) return
-
-        const maxInput = await vscode.window.showInputBox({
-          prompt: 'Max input tokens',
-          value: String(p.limits.maxInputTokens),
-          validateInput: v => isNaN(Number(v)) ? 'Enter a valid number' : null
-        })
-        if (!maxInput) return
-
-        const maxOutput = await vscode.window.showInputBox({
-          prompt: 'Max output tokens',
-          value: String(p.limits.maxOutputTokens),
-          validateInput: v => isNaN(Number(v)) ? 'Enter a valid number' : null
-        })
-        if (!maxOutput) return
-
-        quotaTracker.updateLimits(providerId, {
-          maxRequests: Number(maxRequests),
-          maxInputTokens: Number(maxInput),
-          maxOutputTokens: Number(maxOutput)
-        })
-
-        vscode.window.showInformationMessage('Updated limits for ' + p.name)
-      } else 
-        await ConfigManager.promptEditLimits(quotaTracker)
-      
-    })
-  )
-
   // Export quota data
   context.subscriptions.push(
     vscode.commands.registerCommand('agentx.exportQuota', async () => {
@@ -299,28 +239,6 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('agentx.sidebarResetProvider', (item: any) => {
       if (item && item.provider) 
         quotaTracker?.resetProvider(item.provider.id)
-      
-    })
-  )
-
-  // Record usage from sidebar context menu
-  context.subscriptions.push(
-    vscode.commands.registerCommand('agentx.sidebarRecordUsage', (item: any) => {
-      if (item && item.provider) {
-        vscode.commands.executeCommand('agentx.recordUsage', item.provider.id, {
-          requests: 1,
-          inputTokens: 0,
-          outputTokens: 0
-        })
-      }
-    })
-  )
-
-  // Edit limits from sidebar context menu
-  context.subscriptions.push(
-    vscode.commands.registerCommand('agentx.sidebarEditLimits', (item: any) => {
-      if (item && item.provider) 
-        vscode.commands.executeCommand('agentx.editLimits', item.provider.id)
       
     })
   )

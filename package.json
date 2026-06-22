@@ -41,14 +41,6 @@
         "title": "agentx: Show Quota Sidebar"
       },
       {
-        "command": "agentx.recordUsage",
-        "title": "agentx: Record Usage"
-      },
-      {
-        "command": "agentx.quickRecordUsage",
-        "title": "agentx: Quick Record Usage"
-      },
-      {
         "command": "agentx.editLimits",
         "title": "agentx: Edit Provider Limits"
       },
@@ -112,14 +104,6 @@
           "when": "true"
         },
         {
-          "command": "agentx.recordUsage",
-          "when": "true"
-        },
-        {
-          "command": "agentx.quickRecordUsage",
-          "when": "true"
-        },
-        {
           "command": "agentx.editLimits",
           "when": "true"
         },
@@ -150,11 +134,6 @@
       ],
       "view/item/context": [
         {
-          "command": "agentx.sidebarRecordUsage",
-          "when": "view == agentxQuotaSidebar && viewItem == provider-enabled",
-          "group": "inline"
-        },
-        {
           "command": "agentx.sidebarToggleProvider",
           "when": "view == agentxQuotaSidebar && viewItem == provider-enabled",
           "group": "inline"
@@ -166,10 +145,6 @@
         },
         {
           "command": "agentx.sidebarResetProvider",
-          "when": "view == agentxQuotaSidebar && viewItem == provider-enabled"
-        },
-        {
-          "command": "agentx.sidebarEditLimits",
           "when": "view == agentxQuotaSidebar && viewItem == provider-enabled"
         }
       ],
